@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install --no-cache-dir flask flask-sqlalchemy flask-migrate requests docker
+RUN pip install --no-cache-dir Flask requests docker marshmallow
 
 EXPOSE 5003
 

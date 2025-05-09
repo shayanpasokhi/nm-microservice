@@ -85,7 +85,6 @@ def is_token_blacklisted():
     except Exception as e:
         return jsonify({'success': False, 'msg': 'An unexpected error occurred'}), 500
 
-
 @auth_bp.route('/check_username', methods=['POST'])
 def check_username():
     try:

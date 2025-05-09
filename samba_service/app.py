@@ -15,13 +15,13 @@ def create_folder():
         data = request.get_json()
         CreateFolderSchema().load(data)
         username = data['username']
-        _json, _status = AuthServiceApi.current_user(Config.SECRET_KEY, {'username': username})
+        _json, _status = AuthServiceApi.check_username(Config.SECRET_KEY, {'username': username})
         if not _status or not _json.get('success', False) or not _json.get('exists', False):
             return jsonify({'success': False, 'msg': 'Username is invalid'}), 400
         path = os.path.join(Config.SAMBA_ROOT, username)
         try:
             subprocess.run(['mkdir', '-p', path], check=True)
-            subprocess.run(['chmod', '700', path], check=True)
+            subprocess.run(['chmod', '755', path], check=True)
         except subprocess.CalledProcessError as e:
             return jsonify({'success': False, 'msg': 'Failed to create folder'}), 500
         return jsonify({'success': True, 'msg': 'folder created'}), 201
