@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  auth_service:
+    build: ./auth_service
+    ports:
+      - "5001:5001"
+    env_file: .env
+    volumes:
+      - ./auth_service:/app
+
+  # upload_service:
+  #   build: ./upload_service
+  #   ports:
+  #     - "5002:5002"
+  #   env_file: .env
+  #   volumes:
+  #     - ./upload_service:/app
+  #     - ./tmp_share:/tmp/tmp_share
+
+  # scanner_service:
+  #   build: ./scanner_service
+  #   ports:
+  #     - "5003"
+  #   env_file: .env
+  #   volumes:
+  #     - ./scanner_service:/app
+  #     - ./tmp_share:/tmp/tmp_share
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
+  # report_service:
+  #   build: ./report_service
+  #   ports:
+  #     - "5004:5004"
+  #   env_file: .env
+  #   volumes:
+  #     - ./report_service:/app
+
+  samba_service:
+    build: ./samba_service
+    ports:
+      - "5005"
+    env_file: .env
+    volumes:
+      - ./samba_service:/app
+      - ./samba_share:/mnt/samba_share
+      
+  # samba_server:
+  #   image: dperson/samba
+  #   container_name: samba_server
+  #   ports:
+  #     - "139:139"
+  #     - "445:445"
+  #   volumes:
+  #     - ./samba_share:/mount
+  #   command: >
+  #     -r -u "admin;admin" -s "shares;/mount;yes;no;no;admin"
