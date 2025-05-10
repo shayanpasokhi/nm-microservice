@@ -31,7 +31,7 @@ def register():
     except ValidationError as err:
         return jsonify({'success': False, 'msg': err.messages}), 400
     except Exception as e:
-        return jsonify({'success': False, 'msg': str(e)}), 500
+        return jsonify({'success': False, 'msg': 'An unexpected error occurred'}), 500
 
 @auth_bp.route('/login', methods=['POST'])
 def login():

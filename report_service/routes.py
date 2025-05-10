@@ -12,7 +12,7 @@ report_bp = Blueprint('report', __name__)
 def generate_report(id):
     try:
         results = ScanResult.query.filter_by(id=id).first()
-        return jsonify({'success': True, 'report_id': results.id, 'file_id': results.file_id, 'scanner': results.scanner, 'result': results.result, 'user_id': results.user_id, 'scanned_at': results.scanned_at})
+        return jsonify({'success': True, 'report_id': results.id, 'file_id': results.file_id, 'scanner': results.scanner, 'result': results.result, 'user_id': results.user_id, 'scanned_at': results.scanned_at, 'is_infected': results.is_infected})
     except Exception as e:
         return jsonify({'success': False, 'msg': 'An unexpected error occurred'}), 500
 
@@ -47,6 +47,7 @@ def update_report():
             return jsonify({'success': False, 'msg': 'Report not found'}), 404
         scan.result = data['result']
         scan.scanned_at = datetime.datetime.fromisoformat(data['scanned_at'])
+        scan.is_infected = data['is_infected']
         db.session.commit()
         return jsonify({'success': True, 'msg': 'Report updated successfully'}), 200
     except ValidationError as err:

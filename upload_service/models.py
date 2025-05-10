@@ -12,3 +12,5 @@ class File(db.Model):
     path = db.Column(db.String(512), nullable=False)
     uploaded_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     user_id = db.Column(db.Integer, nullable=True)
+    file_hash = db.Column(db.String(64), nullable=False)
+    push_req = db.Column(db.Boolean, default=False)

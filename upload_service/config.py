@@ -6,5 +6,5 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///upload.db'
     DEBUG = os.environ.get('FLASK_DEBUG')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    TMP_ROOT = '/tmp/tmp_share'
+    TMP_ROOT = '/tmp/tmp_fscan'
     MAX_FILE_SIZE = 10 * 1024 * 1024

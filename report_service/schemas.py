@@ -16,15 +16,21 @@ class AddReportSchema(Schema):
         
     @validates('scanner')
     def validate_scanner(self, value, **kwargs):
-        if len(value) == 0 or len(value) > 255:
+        if len(value) == 0 or len(value) > 64:
             raise ValidationError('Scanner is invalid')
         
 class UpdateReportSchema(Schema):
     report_id = fields.Int(required=True)
     result = fields.Str(required=True)
     scanned_at = fields.Str(required=True)
+    is_infected = fields.Boolean(required=True)
 
     @validates('scanned_at')
     def validate_scanned_at(self, value, **kwargs):
         if len(value) == 0:
             raise ValidationError('Scanned At is invalid')
+        
+    @validates('is_infected')
+    def validate_is_infected(self, value, **kwargs):
+        if not isinstance(value, bool):
+            raise ValidationError('Is Infected is invalid')

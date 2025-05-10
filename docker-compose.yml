@@ -16,7 +16,7 @@ services:
     env_file: .env
     volumes:
       - ./upload_service:/app
-      - /tmp/tmp_share:/tmp/tmp_share
+      - /tmp/tmp_fscan:/tmp/tmp_fscan
 
   scanner_service:
     build: ./scanner_service
@@ -25,7 +25,8 @@ services:
     env_file: .env
     volumes:
       - ./scanner_service:/app
-      - /tmp/tmp_share:/tmp/tmp_share
+      - /tmp/tmp_fscan:/tmp/tmp_fscan
+      - /mnt/samba_fscan:/mnt/samba_fscan
       - /var/run/docker.sock:/var/run/docker.sock
 
   report_service:
@@ -43,7 +44,7 @@ services:
     env_file: .env
     volumes:
       - ./samba_service:/app
-      - ./samba_share:/mnt/samba_share
+      - /mnt/samba_fscan:/mnt/samba_fscan
       
   samba_server:
     image: dperson/samba
@@ -52,6 +53,6 @@ services:
       - "139:139"
       - "445:445"
     volumes:
-      - ./samba_share:/mount
+      - /mnt/samba_fscan:/mount
     command: >
       -r -u "admin;admin" -s "shares;/mount;yes;no;no;admin"
