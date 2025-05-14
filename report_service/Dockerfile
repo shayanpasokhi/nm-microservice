@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install --no-cache-dir Flask Flask-JWT-Extended Flask-SQLAlchemy Flask-Migrate Werkzeug requests marshmallow
+RUN pip install --no-cache-dir Flask Flask-JWT-Extended Flask-SQLAlchemy Flask-Migrate Werkzeug requests marshmallow flask-cors
 
 EXPOSE 5004
 

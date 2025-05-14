@@ -11,6 +11,39 @@ from config import Config
 
 auth_bp = Blueprint('auth', __name__)
 
+@auth_bp.route('/login_register', methods=['POST'])
+def login_register():
+    try:
+        data = request.get_json()
+        AuthSchema().load(data)
+        user = User.query.filter_by(username=data['username']).first()
+        if user:
+            if user.check_password(data['password']):
+                access_token = create_access_token(
+                    identity=str(user.id), expires_delta=timedelta(hours=24)
+                )
+                return jsonify({'success': True, 'msg': 'Logged in', 'access_token': access_token}), 200
+            else:
+                return jsonify({'success': False, 'msg': 'Bad credentials'}), 401
+        else:
+            new_user = User(username=data['username'])
+            new_user.set_password(data['password'])
+            db.session.add(new_user)
+            db.session.commit()
+            _json, _status = SambaServiceApi.create_folder({'username': new_user.username})
+            if not _status or not _json.get('success', False):
+                db.session.delete(new_user)
+                db.session.commit()
+                return jsonify({'success': False, 'msg': 'Failed to create user folder'}), 500
+            access_token = create_access_token(
+                identity=str(new_user.id), expires_delta=timedelta(hours=24)
+            )
+            return jsonify({'success': True, 'msg': 'Registered and logged in', 'access_token': access_token}), 201
+    except ValidationError as err:
+        return jsonify({'success': False, 'msg': err.messages}), 400
+    except Exception as e:
+        return jsonify({'success': False, 'msg': 'An unexpected error occurred'}), 500
+
 @auth_bp.route('/register', methods=['POST'])
 def register():
     try:

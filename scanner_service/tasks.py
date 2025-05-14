@@ -34,9 +34,9 @@ def scan():
             return jsonify({'success': False, 'msg': 'File path does not exist'}), 400
         report_data = []
         for scanner in Config.SCANNERS:
-            __json, __status = ReportServiceApi.add(Config.SECRET_KEY, {'file_id': data['file_id'], 'scanner': scanner['name'], 'user_id': data['user_id']})
-            if __status and __json.get('success', False) and __json.get('report_id', False):
-                _data = {'report_id': __json['report_id'], 'file_id': data['file_id'], 'path': data['path'], 'scanner_info': scanner, 'user_id': data['user_id'], 'push_req': data['push_req'], 'filename': data['filename'], 'username': data['username']}
+            ___json, ___status = ReportServiceApi.add(Config.SECRET_KEY, {'file_id': data['file_id'], 'scanner': scanner['name'], 'user_id': data['user_id']})
+            if ___status and ___json.get('success', False) and ___json.get('report_id', False):
+                _data = {'report_id': ___json['report_id'], 'file_id': data['file_id'], 'path': data['path'], 'scanner_info': scanner, 'user_id': data['user_id'], 'push_req': data['push_req'], 'filename': data['filename'], 'username': data['username']}
                 report_data.append(_data)
         if len(report_data) != 0:
             thread = threading.Thread(target=run_scan, args=(report_data,))

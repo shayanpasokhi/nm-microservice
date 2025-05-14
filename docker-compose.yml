@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   auth_service:
@@ -45,7 +45,7 @@ services:
     volumes:
       - ./samba_service:/app
       - /mnt/samba_fscan:/mnt/samba_fscan
-      
+
   samba_server:
     image: dperson/samba
     container_name: samba_server
@@ -56,3 +56,12 @@ services:
       - /mnt/samba_fscan:/mount
     command: >
       -r -u "admin;admin" -s "shares;/mount;yes;no;no;admin"
+
+  frontend_service:
+    image: node:16
+    working_dir: /app
+    volumes:
+      - ./frontend_service:/app
+    ports:
+      - "3000:3000"
+    command: npm start

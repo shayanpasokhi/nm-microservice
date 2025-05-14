@@ -15,6 +15,14 @@ from helper import compute_file_hash
 
 upload_bp = Blueprint('upload', __name__)
 
+@upload_bp.route('/<int:id>', methods=['GET'])
+def generate_file(id):
+    try:
+        results = File.query.filter_by(id=id).first()
+        return jsonify({'success': True, 'file_id': results.id, 'filename': results.filename, 'file_hash': results.file_hash})
+    except Exception as e:
+        return jsonify({'success': False, 'msg': 'An unexpected error occurred'}), 500
+
 @upload_bp.route('/', methods=['POST'])
 def upload_file():
     try:
@@ -65,7 +73,7 @@ def upload_file():
             db.session.commit()
             shutil.rmtree(_dir)
             return jsonify({'success': False, 'msg': 'Failed to upload file'}), 500
-        return jsonify({'success': True, 'msg': 'File uploaded successfully', 'file_id': file.id, 'report_ids': __json['report_ids']}), 202
+        return jsonify({'success': True, 'msg': 'File uploaded successfully', 'file_id': file.id, 'filename': file.filename, 'file_hash': file.file_hash, 'report_ids': __json['report_ids']}), 202
     except Exception as e:
         return jsonify({'success': False, 'msg': 'An unexpected error occurred'}), 500
     

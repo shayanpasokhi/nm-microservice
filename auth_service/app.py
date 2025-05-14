@@ -3,11 +3,13 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from config import Config
+from flask_cors import CORS
 
 migrate = Migrate()
 
 app = Flask(__name__)
 app.config.from_object(Config)
+CORS(app, origins=["http://localhost:3000"])
 
 models.init_app(app)
 migrate.init_app(app, models.db)
